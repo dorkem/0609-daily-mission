@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codesquad.jpaboard.dto.global.ResponseDto;
 import com.codesquad.jpaboard.dto.request.LoginRequest;
 import com.codesquad.jpaboard.dto.request.SignupRequest;
+import com.codesquad.jpaboard.dto.response.LoginResponse;
 import com.codesquad.jpaboard.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class AuthController {
 
   @PostMapping("/api/login")
   public ResponseDto<?> login(@RequestBody LoginRequest request) {
-    return ResponseDto.ok(authService.login(request));
+    LoginResponse response = authService.login(request);
+    return ResponseDto.ok(response);
   }
 }

@@ -24,3 +24,5 @@ spring:
       mode: always
       platform: h2
       defer-datasource-initialization: true
+  jwt:
+    secret: ${JWT_SECRET:F9c0FlcLC_NSSXm3EFy2q7zZphkBNoHcer0PrcAe3AQ_}

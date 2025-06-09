@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.codesquad.jpaboard.common.AuthUtils;
 import com.codesquad.jpaboard.dto.global.ResponseDto;
 import com.codesquad.jpaboard.dto.request.CommentRequest;
 import com.codesquad.jpaboard.dto.request.PostCreateRequest;
@@ -16,6 +17,7 @@ import com.codesquad.jpaboard.repository.PostRepository;
 import com.codesquad.jpaboard.service.CommentService;
 import com.codesquad.jpaboard.service.PostService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -24,8 +26,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/posts")
 public class PostController {
   private final PostService postService;
-  private final CommentService commentService;
-  private final PostRepository postRepository;
 
   @GetMapping
   public ResponseDto<?> getPost() {
@@ -49,16 +49,20 @@ public class PostController {
   @PutMapping("/{postId}")
   public ResponseDto<?> updatePost(
       @RequestBody PostCreateRequest postRequest,
-      @PathVariable Long postId
+      @PathVariable Long postId,
+      HttpServletRequest httpRequest
   ){
-    Long userId = 1L;
+    Long userId = AuthUtils.extractUserId(httpRequest);
     postService.updateById(postRequest, postId, userId);
     return ResponseDto.ok(null);
   }
 
   @DeleteMapping("/{postId}")
-  public ResponseDto<?> deletePost(@PathVariable Long postId) {
-    Long userId = 1L;
+  public ResponseDto<?> deletePost(
+      @PathVariable Long postId,
+      HttpServletRequest httpRequest
+  ) {
+    Long userId = AuthUtils.extractUserId(httpRequest);
     postService.deleteById(userId, postId);
     return ResponseDto.ok(null);
   }
